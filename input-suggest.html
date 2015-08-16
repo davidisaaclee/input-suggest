@@ -1,0 +1,154 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-input/iron-input.html">
+
+<dom-module id="input-suggest">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+      background-color: var(--input-suggest-background-color);
+      overflow: hidden;
+    }
+
+    input {
+      box-sizing: border-box;
+      display: block;
+      width: 80%;
+      margin: 1em auto;
+      font-size: 14pt;
+    }
+
+    .suggestions {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .suggestions li {
+      /*padding: 0.5em 10%;*/
+
+      background-color: var(--input-suggest-background-color);
+
+      cursor: pointer;
+
+      @apply(--input-suggest-suggestion-item);
+    }
+
+    .suggestions li div {
+      width: 80%;
+      margin: 0 auto;
+      padding: 0.5em 0;
+    }
+
+    .suggestions li:nth-child(even) {
+      @apply(--input-suggestion-suggestion-even);
+    }
+
+    .suggestions li:hover {
+      @apply(--input-suggest-suggestion-hover);
+    }
+  </style>
+
+  <template>
+    <input is="iron-input" type="search" bind-value="{{userInput}}">
+    <ul class="suggestions">
+      <template is="dom-repeat" items="{{suggestFrom(userInput, suggestions)}}">
+        <li on-up="_selectSuggestion">
+          <div>{{item.display}}</div>
+        </li>
+      </template>
+    </ul>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'input-suggest',
+
+    properties: {
+      suggestions: {
+        type: Array,
+        value: []
+      },
+
+      userInput: {
+        type: String,
+        value: "",
+        notify: true
+      },
+
+      // Enables or disables fuzzy search.
+      fuzzy: {
+        type: Boolean,
+        value: true
+      },
+
+      // Should this element display all options on empty input (true), or none?
+      displayOnEmpty: {
+        type: Boolean,
+        value: false
+      },
+
+      // Should this element clear its input on select?
+      autoreset: {
+        type: Boolean,
+        value: false
+      },
+
+      // What key should this element look at to search its suggestions?
+      suggestionKey: {
+        type: String,
+        value: 'display'
+      }
+    },
+
+    ready: function () {
+    },
+
+    suggestFrom: function (str, suggestions) {
+      var scope = this;
+
+      if (str.length == 0) {
+        if (this.displayOnEmpty) {
+          return suggestions;
+        } else {
+          return [];
+        }
+      }
+
+      var pattern = (function () {
+        var result = '';
+
+        if (scope.fuzzy) {
+          for (var i = 0; i < str.length; i++) {
+            result += str.charAt(i) + '.*';
+          }
+        } else {
+          result = '^' + str;
+        }
+        return result;
+      })();
+
+      return suggestions
+        .filter(function (elm) {
+          return elm[scope.suggestionKey].match(new RegExp(pattern)) != null;
+        });
+    },
+
+    _selectSuggestion: function (evt, detail) {
+      this.fire('selected', {
+        item: evt.model.item
+      });
+
+      if (this.autoreset) {
+        this.userInput = '';
+      }
+    }
+  });
+
+</script>

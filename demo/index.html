@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>input-suggest Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../input-suggest.html">
+
+    <style is="custom-style" type="text/css">
+      #container {
+        width: 50%;
+        border-radius: 5px;
+        margin: 0 auto;
+        /*background-color: #c00;*/
+      }
+
+      input-suggest {
+        border-radius: 5px;
+
+        --input-suggest-background-color: #ccc;
+
+        --input-suggest-suggestion-item: {
+          /*color: red;*/
+          transition: all 0.1s;
+          font-family: Helvetica, sans-serif;
+        };
+
+        --input-suggestion-suggestion-even: {
+          background-color: #eee;
+        };
+
+        --input-suggest-suggestion-hover: {
+          background-color: #222;
+          color: #eee;
+        };
+
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="container">
+      <input-suggest autoreset>
+      </input-suggest>
+    </div>
+    <p>Selected:<span id="selectedNotifier"></span></p>
+
+    <script>
+      var inputElm = document.querySelector('input-suggest');
+      var makeSuggestion = function (displayText) {
+        return {
+          display: displayText
+        };
+      };
+      inputElm.suggestions = [
+        makeSuggestion('a'),
+        makeSuggestion('b'),
+        makeSuggestion('david'),
+        makeSuggestion('c'),
+        makeSuggestion('tool'),
+      ];
+
+      inputElm.addEventListener('selected', function (evt) {
+        document.querySelector('#selectedNotifier')
+          .innerText = evt.detail.item.display;
+      });
+    </script>
+
+  </body>
+</html>

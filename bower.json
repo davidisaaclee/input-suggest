@@ -1,0 +1,30 @@
+{
+  "name": "input-suggest",
+  "version": "1.0.0",
+  "authors": [
+    "Anonymous <anonymous@example.com>"
+  ],
+  "description": "An element providing text input and a menu of autocompleting suggestions.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "input"
+  ],
+  "main": "input-suggest.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/davidisaaclee/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-input": "PolymerElements/iron-input#~1.0.5"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}
