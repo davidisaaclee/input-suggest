@@ -51,7 +51,7 @@
   </style>
 
   <template>
-    <input is="iron-input" type="search" bind-value="{{userInput}}">
+    <input id="searchbox" is="iron-input" type="search" bind-value="{{userInput}}">
     <ul class="suggestions">
       <template is="dom-repeat" items="{{suggestFrom(userInput, suggestions)}}">
         <li on-up="_selectSuggestion">
@@ -108,10 +108,24 @@
     },
 
     ready: function () {
+      var self = this;
+      this.$.searchbox.addEventListener('keyup', function (evt) {
+        var keycode = evt.keyCode ? evt.keyCode : evt.which;
+        if (keycode == 13) {
+          evt.preventDefault();
+          self.fire('add', {
+            text: self.$.searchbox.value
+          });
+
+          if (self.autoreset) {
+            self._reset();
+          }
+        }
+      });
     },
 
     suggestFrom: function (str, suggestions) {
-      var scope = this;
+      var self = this;
 
       if (str.length == 0) {
         if (this.displayOnEmpty) {
@@ -124,7 +138,7 @@
       var pattern = (function () {
         var result = '';
 
-        if (scope.fuzzy) {
+        if (self.fuzzy) {
           for (var i = 0; i < str.length; i++) {
             result += str.charAt(i) + '.*';
           }
@@ -136,7 +150,7 @@
 
       return suggestions
         .filter(function (elm) {
-          return elm[scope.suggestionKey].match(new RegExp(pattern)) != null;
+          return elm[self.suggestionKey].match(new RegExp(pattern)) != null;
         });
     },
 
@@ -146,8 +160,12 @@
       });
 
       if (this.autoreset) {
-        this.userInput = '';
+        this._reset();
       }
+    },
+
+    _reset: function () {
+      this.userInput = '';
     }
   });
 

@@ -65,6 +65,11 @@
         document.querySelector('#selectedNotifier')
           .innerText = evt.detail.item.display;
       });
+
+      inputElm.addEventListener('add', function (evt) {
+        document.querySelector('#selectedNotifier')
+          .innerText = 'new item: ' + evt.detail.text;
+      });
     </script>
 
   </body>
