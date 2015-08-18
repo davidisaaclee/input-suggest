@@ -45,9 +45,10 @@
       </input-suggest>
     </div>
     <p>Selected:<span id="selectedNotifier"></span></p>
+    <button onclick="inputElm.focus()">Focus</button>
 
     <script>
-      var inputElm = document.querySelector('input-suggest');
+      inputElm = document.querySelector('input-suggest');
       var makeSuggestion = function (displayText) {
         return {
           display: displayText
