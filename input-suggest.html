@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-input/iron-input.html">
 
 <dom-module id="input-suggest">
 
@@ -125,6 +124,7 @@
     },
 
     focus: function () {
+      console.log('focusing');
       return this.$.searchbox.focus()
     },
 
