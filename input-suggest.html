@@ -51,7 +51,7 @@
 
   <template>
     <input id="searchbox" type="search" value="{{userInput::input}}">
-    <ul class="suggestions" hidden$="{{!showSuggestions}}">
+    <ul class="suggestions" hidden$="{{!_showSuggestions}}">
       <template is="dom-repeat" items="{{suggestFrom(userInput, suggestions, displayOnEmpty)}}">
         <li on-up="_selectSuggestion">
           <div>{{item.display}}</div>
@@ -105,12 +105,10 @@
         value: 'display'
       },
 
-      // `true` to show suggestions, `false` to hide
-      showSuggestions: {
-        type: Boolean,
-        value: false
-      }
     },
+
+    // `true` to show suggestions, `false` to hide
+    _showSuggestions: false,
 
     ready: function () {
       var self = this;
@@ -128,13 +126,14 @@
         }
       });
 
-      var scope = this;
+      self._showSuggestions = false;
+
       this.$.searchbox.addEventListener('focus', function (evt) {
-        scope.showSuggestions = true;
+        self._showSuggestions = true;
       });
 
       this.$.searchbox.addEventListener('blur', function (evt) {
-        scope.showSuggestions = false;
+        self._showSuggestions = false;
       });
     },
 
