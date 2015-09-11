@@ -51,8 +51,8 @@
 
   <template>
     <input id="searchbox" type="search" value="{{userInput::input}}">
-    <ul class="suggestions">
-      <template is="dom-repeat" items="{{suggestFrom(userInput, suggestions)}}">
+    <ul class="suggestions" hidden$="{{!showSuggestions}}">
+      <template is="dom-repeat" items="{{suggestFrom(userInput, suggestions, displayOnEmpty)}}">
         <li on-up="_selectSuggestion">
           <div>{{item.display}}</div>
         </li>
@@ -103,6 +103,12 @@
       suggestionKey: {
         type: String,
         value: 'display'
+      },
+
+      // `true` to show suggestions, `false` to hide
+      showSuggestions: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -121,18 +127,26 @@
           }
         }
       });
+
+      var scope = this;
+      this.$.searchbox.addEventListener('focus', function (evt) {
+        scope.showSuggestions = true;
+      });
+
+      this.$.searchbox.addEventListener('blur', function (evt) {
+        scope.showSuggestions = false;
+      });
     },
 
     focus: function () {
-      console.log('focusing');
       return this.$.searchbox.focus()
     },
 
-    suggestFrom: function (str, suggestions) {
+    suggestFrom: function (str, suggestions, displayOnEmpty) {
       var self = this;
 
       if (str.length == 0) {
-        if (this.displayOnEmpty) {
+        if (displayOnEmpty) {
           return suggestions;
         } else {
           return [];
@@ -165,6 +179,8 @@
 
       if (this.autoreset) {
         this._reset();
+      } else {
+        this.userInput = evt.model.item[this.suggestionKey];
       }
     },
 

@@ -41,11 +41,19 @@
   <body>
 
     <div id="container">
-      <input-suggest autoreset>
+      <input-suggest>
       </input-suggest>
     </div>
     <p>Selected:<span id="selectedNotifier"></span></p>
     <button onclick="inputElm.focus()">Focus</button>
+    <div>
+      <input id="display-empty-switch" type="checkbox">
+      <span>Display on empty</span>
+    </div>
+    <div>
+      <input id="autoreset-switch" type="checkbox">
+      <span>Autoreset</span>
+    </div>
 
     <script>
       inputElm = document.querySelector('input-suggest');
@@ -70,6 +78,16 @@
       inputElm.addEventListener('add', function (evt) {
         document.querySelector('#selectedNotifier')
           .innerText = 'new item: ' + evt.detail.text;
+      });
+
+      var displayEmptySwitch = document.querySelector('#display-empty-switch');
+      displayEmptySwitch.addEventListener('change', function (evt) {
+        inputElm.displayOnEmpty = evt.target.checked;
+      });
+
+      var autoresetSwitch = document.querySelector('#autoreset-switch');
+      autoresetSwitch.addEventListener('change', function (evt) {
+        inputElm.autoreset = evt.target.checked;
       });
     </script>
 
